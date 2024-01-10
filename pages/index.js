@@ -1,12 +1,44 @@
-import Image from "next/image";
-import { Inter } from "next/font/google";
+import { v4 as uuidv4 } from "uuid";
+import { useRouter } from "next/navigation";
 
-const inter = Inter({ subsets: ["latin"] });
+import styles from "@/styles/home.module.css";
+import { useState } from "react";
 
 export default function Home() {
+  const router = useRouter();
+  const [roomId, setRoomId] = useState("");
+
+  const createAndJoin = () => {
+    const roomId = uuidv4();
+    router.push(`/${roomId}`);
+  };
+
+  const joinRoom = () => {
+    if (roomId) router.push(`/${roomId}`);
+    else {
+      alert("Please provide a valid room id");
+    }
+  };
   return (
-    <>
-      <h1>Home</h1>
-    </>
+    <div className={styles.homeContainer}>
+      <h1 className={styles.customHeading}>Google Meet Clone</h1>
+      <div className={styles.enterRoom}>
+        <input
+          className={styles.customInput}
+          placeholder="Enter Room ID"
+          value={roomId}
+          onChange={(e) => setRoomId(e?.target?.value)}
+        />
+        <button className={styles.customButton} onClick={joinRoom}>
+          Join Room
+        </button>
+      </div>
+      <span className={styles.separatorText}>
+        ---------------OR--------------
+      </span>
+      <button className={styles.customButton} onClick={createAndJoin}>
+        Create a new room
+      </button>
+    </div>
   );
 }
